@@ -90,12 +90,16 @@ class App extends Component {
     this.state.input)
     .then (response => {
       if (response) {
-        fetch('http://localhost:3000/image', {
-          method: 'post',
+        fetch('http://localhost:3001/image', {
+          method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
             id: this.state.user.id
           })
+        })
+        .then(response => response.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, { entries: count }))
         })
 
       }
@@ -121,7 +125,7 @@ class App extends Component {
           params={particlesOptions}
         />
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
-          { this.state.route === 'home' 
+          { route === 'home' 
           ? <div>
               <Logo />
               <Rank name={this.state.user.name} entries={this.state.user.entries}/>
