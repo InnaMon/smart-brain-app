@@ -90,7 +90,13 @@ class App extends Component {
     this.state.input)
     .then (response => {
       if (response) {
-        fetch('http://localhost:3000/image')
+        fetch('http://localhost:3000/image', {
+          method: 'post',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: this.state.user.id
+          })
+        })
 
       }
       this.displayFaceBox(this.calculateFaceLocation(response))
@@ -118,7 +124,7 @@ class App extends Component {
           { this.state.route === 'home' 
           ? <div>
               <Logo />
-              <Rank />
+              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
               <ImageLinkForm 
                 onInputChange={this.onInputChange} 
                 onButtonSubmit={this.onButtonSubmit}
