@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from '../Spinner/Spinner';
 
 class Signin extends React.Component {
     constructor(props) {
@@ -6,7 +7,8 @@ class Signin extends React.Component {
         this.state = {
             signInEmail: '',
             signInPassword: '',
-            error: ''
+            error: '',
+            loading: false
         }
         this.formRef = React.createRef();
     }
@@ -17,6 +19,7 @@ class Signin extends React.Component {
     }
 
     onSubmitSignIn =() => {
+        this.setState({loading : true})
         fetch('https://fast-plateau-16833.herokuapp.com/signin', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -33,8 +36,12 @@ class Signin extends React.Component {
             } else {
                 this.setState({error : '* Your email or password is incorrect. Try again!'})
             }
+            this.setState({loading : false})
         })
-        .catch(err => console.log('Signin error', err))
+        .catch(err => {
+            console.log('Signin error', err)
+            this.setState({loading : false})
+        })
     }
 
     validateForm = () => {
@@ -51,6 +58,7 @@ class Signin extends React.Component {
         return (
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
+                { this.state.loading ? <Spinner /> :
                     <div className="measure">
                         <form ref={this.formRef}>
                             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -78,7 +86,7 @@ class Signin extends React.Component {
                                 />
                             </div>
                             </fieldset>
-                        </form>
+                        </form> 
                         <div className="">
                           <input 
                             onClick={this.validateForm}
@@ -91,7 +99,7 @@ class Signin extends React.Component {
                             <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
                         </div>
                         <div><p style={{color: 'yellow', fontWeight: '600'}}>{this.state.error}</p></div>
-                    </div>
+                    </div> }
                 </main>
             </article>
         );

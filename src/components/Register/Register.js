@@ -1,4 +1,5 @@
 import React from 'react';
+import Spinner from '../Spinner/Spinner';
 
 class Register extends React.Component {
     constructor(props) {
@@ -7,7 +8,8 @@ class Register extends React.Component {
             email: '',
             password: '',
             name: '',
-            error: ''
+            error: '',
+            loading: false
         }
         this.formRef = React.createRef();
     }
@@ -18,6 +20,7 @@ class Register extends React.Component {
     }
 
     onSubmitRegister =() => {
+        this.setState({loading : true})
         fetch('https://fast-plateau-16833.herokuapp.com/register', {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
@@ -33,8 +36,12 @@ class Register extends React.Component {
                 this.props.loadUser(user);
                 this.props.onRouteChange('home');
             }
+            this.setState({loading : false})
         })
-        .catch(err => console.log('Register error', err))
+        .catch(err => {
+            console.log('Register error', err)
+            this.setState({loading : false})
+        })
     }
 
     validateForm = () => {
@@ -50,6 +57,7 @@ class Register extends React.Component {
         return (
             <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center">
                 <main className="pa4 black-80">
+                { this.state.loading ? <Spinner /> :
                     <div className="measure">
                         <form ref={this.formRef}>
                             <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
@@ -98,7 +106,7 @@ class Register extends React.Component {
                           />
                         </div>
                         <div><p style={{color: 'yellow', fontWeight: '600'}}>{this.state.error}</p></div>
-                    </div>
+                    </div> }
                 </main>
             </article>
         );
