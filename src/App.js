@@ -85,6 +85,7 @@ class App extends Component {
       })
       .then(response => response.json())
       .then (response => {
+        console.log('response', response)
         if (response) {
           fetch('https://fast-plateau-16833.herokuapp.com/image', {
             method: 'put',
@@ -98,7 +99,6 @@ class App extends Component {
             this.setState(Object.assign(this.state.user, { entries: count }))
           })
           .catch(console.log);
-
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
